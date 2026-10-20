@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Galaxy Sprint</title>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/righteous.css">
+
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+    }
+
+    canvas {
+      position: fixed !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) scale(var(--game-scale, 1)) !important;
+      transform-origin: center center !important;
+      display: block;
+    }
+
+    .fontPreload {
+      position: absolute;
+      visibility: hidden;
+      pointer-events: none;
+      font-family: Righteous, sans-serif;
+    }
+  </style>
+
+  <script src="lib/phaser.min.js"></script>
+  <script src="lib/utils.js"></script>
+</head>
+<body>
+  <div class="fontPreload">.</div>
+
+  <script>
+    function fitGame() {
+      const canvas = document.querySelector("canvas");
+      if (!canvas) return;
+
+      const width = canvas.width;
+      const height = canvas.height;
+      if (!width || !height) return;
+
+      const scale = Math.min(
+        window.innerWidth / width,
+        window.innerHeight / height
+      );
+
+      document.documentElement.style.setProperty("--game-scale", scale);
+
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+    }
+
+    new MutationObserver(fitGame).observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    window.addEventListener("resize", fitGame);
+    window.addEventListener("orientationchange", fitGame);
+
+    setInterval(fitGame, 500);
+  </script>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
